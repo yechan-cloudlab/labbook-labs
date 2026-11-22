@@ -1,0 +1,55 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowAppRole",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::111122223333:role/app-role"
+      },
+      "Action": [
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:ChangeMessageVisibility",
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": "arn:aws:sqs:ap-northeast-2:111122223333:orders"
+    },
+    {
+      "Sid": "AllowSnsTopic",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "sns.amazonaws.com"
+      },
+      "Action": "sqs:SendMessage",
+      "Resource": "arn:aws:sqs:ap-northeast-2:111122223333:orders",
+      "Condition": {
+        "ArnLike": {
+          "aws:SourceArn": "arn:aws:sns:ap-northeast-2:111122223333:orders-topic"
+        }
+      }
+    },
+    {
+      "Sid": "DenyMessageActionsOutsideVpce",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": [
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:ChangeMessageVisibility"
+      ],
+      "Resource": "arn:aws:sqs:ap-northeast-2:111122223333:orders",
+      "Condition": {
+        "StringNotEquals": {
+          "aws:SourceVpce": "vpce-0123456789abcdef0"
+        },
+        "BoolIfExists": {
+          "aws:PrincipalIsAWSService": "false",
+          "aws:ViaAWSService": "false"
+        }
+      }
+    }
+  ]
+}

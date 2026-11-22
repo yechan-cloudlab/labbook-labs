@@ -1,0 +1,22 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowStudioFromVpcSubnet",
+      "Effect": "Allow",
+      "Action": [
+        "sagemaker:CreatePresignedDomainUrl",
+        "sagemaker:DescribeUserProfile"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "IpAddress": {
+          "aws:VpcSourceIp": "10.0.1.0/24"
+        },
+        "StringEquals": {
+          "aws:SourceVpc": "vpc-0123456789abcdef0"
+        }
+      }
+    }
+  ]
+}

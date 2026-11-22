@@ -1,0 +1,22 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowStudioFromVpce",
+      "Effect": "Allow",
+      "Action": [
+        "sagemaker:CreatePresignedDomainUrl",
+        "sagemaker:DescribeUserProfile"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:SourceVpce": [
+            "vpce-0aaa1111bbbb22223",
+            "vpce-0ccc3333dddd44445"
+          ]
+        }
+      }
+    }
+  ]
+}
